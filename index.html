@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Veta · Boceto web</title>
+<meta name="description" content="Boceto de estructura del sitio de Veta, desarrolladora inmobiliaria.">
+<meta name="robots" content="noindex">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Boceto de estructura (wireframe): grises con un leve tono frío, bloques de imagen tachados, notas de diseño en azul lápiz. Sin estética final. */
+:root {
+  --bg: #F3F4F5;
+  --surface: #FFFFFF;
+  --block: #DCDFE3;
+  --block-2: #C9CDD3;
+  --ink: #1E2329;
+  --ink-2: #5D6570;
+  --line: #CDD1D6;
+  --note: #2F5BD3;
+  --note-soft: rgba(47, 91, 211, 0.08);
+  --ok: #2E7D4F;
+  --warn: #A66A12;
+  --bad: #A8382F;
+  --f-display: "Archivo", "Arial Narrow", Arial, sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", Consolas, "Courier New", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15181C; --surface: #1D2126; --block: #2A2F36; --block-2: #353B43; --ink: #E5E8EC; --ink-2: #9AA2AD; --line: #343A42;
+    --note: #8EA9F5; --note-soft: rgba(142, 169, 245, 0.10); --ok: #66BE8A; --warn: #DDA24A; --bad: #E2766D; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15181C; --surface: #1D2126; --block: #2A2F36; --block-2: #353B43; --ink: #E5E8EC; --ink-2: #9AA2AD; --line: #343A42;
+  --note: #8EA9F5; --note-soft: rgba(142, 169, 245, 0.10); --ok: #66BE8A; --warn: #DDA24A; --bad: #E2766D; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.55; }
+h1, h2, h3 { font-family: var(--f-display); font-stretch: 85%; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+h2 { font-size: clamp(26px, 4vw, 36px); font-weight: 700; }
+h3 { font-size: 18px; font-weight: 700; }
+p { margin: 0; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--note); outline-offset: 2px; }
+.gut { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.inner { max-width: 1180px; margin: 0 auto; }
+.muted { color: var(--ink-2); }
+.eyebrow { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); }
+.tbd { font-family: var(--f-mono); font-size: 0.85em; background: var(--block); padding: 1px 6px; border-radius: 3px; color: var(--ink-2); white-space: nowrap; }
+.ej { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--warn); border: 1px dashed var(--warn); border-radius: 3px; padding: 0 5px; white-space: nowrap; }
+
+/* Bloque de imagen tachado */
+.img { position: relative; background: var(--block); overflow: hidden; display: flex; align-items: center; justify-content: center; color: var(--ink-2); font-family: var(--f-mono); font-size: 12px; text-align: center; padding: 8px; }
+.img::before, .img::after { content: ""; position: absolute; left: -10%; right: -10%; top: 50%; height: 1px; background: var(--block-2); }
+.img::before { transform: rotate(var(--a, 30deg)); } .img::after { transform: rotate(calc(var(--a, 30deg) * -1)); }
+.img span { position: relative; z-index: 1; background: var(--block); padding: 2px 6px; border-radius: 3px; }
+
+/* Notas de diseño */
+.nota { border: 1.5px dashed var(--note); background: var(--note-soft); color: var(--note); font-family: var(--f-mono); font-size: 12px; line-height: 1.45; padding: 8px 10px; border-radius: 6px; max-width: 70ch; }
+.nota b { font-weight: 500; }
+body.sin-notas .nota { display: none; }
+
+/* Barra superior del boceto */
+.boceto-bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40; background: var(--ink); color: var(--bg); font-size: 12.5px; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 41; background: var(--ink); }
+.boceto-bar .inner { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; justify-content: space-between; padding-block: 8px; }
+.boceto-bar nav { display: flex; flex-wrap: wrap; gap: 4px; }
+.boceto-bar a, .boceto-bar button { background: transparent; border: 1px solid rgba(255,255,255,0.25); color: inherit; border-radius: 4px; padding: 3px 9px; text-decoration: none; cursor: pointer; font-size: 12.5px; }
+:root[data-theme="dark"] .boceto-bar a, :root[data-theme="dark"] .boceto-bar button { border-color: rgba(0,0,0,0.25); }
+.boceto-bar a[aria-current="page"] { background: var(--bg); color: var(--ink); }
+
+/* Encabezado del sitio */
+.site-head { position: absolute; left: 0; right: 0; z-index: 5; }
+.site-head .inner { display: flex; align-items: center; justify-content: space-between; padding-block: 18px; }
+.logo { font-family: var(--f-display); font-weight: 800; font-size: 22px; letter-spacing: 0.18em; background: var(--surface); padding: 6px 12px; border-radius: 2px; text-decoration: none; }
+.iconos { display: flex; gap: 6px; background: var(--surface); padding: 6px; border-radius: 4px; }
+.ico { width: 34px; height: 34px; border: 1px solid var(--line); border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-family: var(--f-mono); font-size: 11px; background: var(--surface); cursor: pointer; text-decoration: none; }
+
+/* Menú */
+.menu { position: fixed; inset: 0; z-index: 50; background: var(--surface); padding: calc(24px + env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px)) 24px max(24px, env(safe-area-inset-left, 0px)); display: grid; align-content: start; gap: 20px; }
+.menu ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.menu a { font-family: var(--f-display); font-size: clamp(28px, 6vw, 44px); font-weight: 700; text-decoration: none; }
+.menu .close { justify-self: end; background: none; border: 1px solid var(--line); border-radius: 4px; padding: 6px 12px; cursor: pointer; }
+
+/* INICIO: intro partida */
+.intro { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; height: clamp(420px, 78vh, 760px); background: var(--bg); }
+.intro .img { height: 100%; --a: 52deg; }
+.intro .marca { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--surface); padding: 22px 28px; display: grid; gap: 6px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.12); }
+.intro .marca .l { font-family: var(--f-display); font-weight: 800; font-size: clamp(44px, 9vw, 96px); letter-spacing: 0.22em; line-height: 1; padding-left: 0.22em; }
+@media (prefers-reduced-motion: no-preference) {
+  .intro .img:first-child { animation: abrirIzq 1.4s cubic-bezier(.2,.7,.2,1) both; }
+  .intro .img:nth-child(2) { animation: abrirDer 1.4s cubic-bezier(.2,.7,.2,1) both; }
+  .intro .marca { animation: marca 1s .9s ease-out both; }
+  .intro .marca .l span { display: inline-block; animation: letra .5s ease-out both; }
+}
+@keyframes abrirIzq { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0 0 0 0); } }
+@keyframes abrirDer { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes marca { from { opacity: 0.001; transform: translate(-50%, -46%); } to { opacity: 1; transform: translate(-50%, -50%); } }
+@keyframes letra { from { opacity: 0.001; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@media (max-width: 640px) { .intro { grid-template-columns: 1fr; } .intro .img:nth-child(2) { display: none; } }
+
+.sec { padding-block: 64px; }
+.sec .inner { display: grid; gap: 22px; }
+.sec-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 10px 24px; }
+.sec-head p { max-width: 60ch; }
+
+/* Mosaico de proyectos */
+.mosaico { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 210px; gap: 4px; }
+.mosaico .p { position: relative; cursor: pointer; text-decoration: none; display: block; overflow: hidden; }
+.mosaico .p .img { position: absolute; inset: 0; --a: 38deg; }
+.mosaico .p.grande { grid-column: span 2; grid-row: span 2; }
+.mosaico .p .cap { position: absolute; left: 0; right: 0; bottom: 0; background: var(--surface); padding: 10px 12px; display: flex; justify-content: space-between; gap: 8px; align-items: center; transform: translateY(0); }
+.mosaico .p .cap b { font-family: var(--f-display); font-size: 17px; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .mosaico .p .cap { transition: transform .25s ease; transform: translateY(100%); }
+  .mosaico .p:hover .cap, .mosaico .p:focus-visible .cap { transform: translateY(0); }
+}
+@media (max-width: 760px) { .mosaico { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 170px; } }
+.estado { font-family: var(--f-mono); font-size: 11px; border: 1px solid currentColor; border-radius: 10px; padding: 1px 8px; white-space: nowrap; }
+.estado.preventa { color: var(--note); } .estado.obra { color: var(--warn); }
+
+.dos { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+@media (max-width: 760px) { .dos { grid-template-columns: 1fr; } }
+
+/* Botón WhatsApp */
+.wa { display: inline-flex; align-items: center; gap: 10px; background: var(--ink); color: var(--bg); border: 0; border-radius: 4px; padding: 12px 16px; cursor: pointer; text-decoration: none; font-weight: 600; }
+.wa small { display: block; font-weight: 400; opacity: 0.75; font-size: 12px; }
+.wa .w { width: 26px; height: 26px; border: 1.5px solid currentColor; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-family: var(--f-mono); font-size: 10px; }
+.btn2 { display: inline-flex; align-items: center; gap: 8px; background: transparent; border: 1.5px solid var(--ink); border-radius: 4px; padding: 11px 16px; cursor: pointer; font-weight: 600; }
+.flotante { position: fixed; right: calc(18px + env(safe-area-inset-right, 0px)); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 30; width: 58px; height: 58px; border-radius: 50%; background: var(--ink); color: var(--bg); border: 0; cursor: pointer; font-family: var(--f-mono); font-size: 11px; box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+
+/* Panel del bot (simulación) */
+.chat { position: fixed; right: calc(18px + env(safe-area-inset-right, 0px)); bottom: calc(88px + env(safe-area-inset-bottom, 0px)); z-index: 31; width: min(360px, calc(100vw - 36px)); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 16px 48px rgba(0,0,0,0.22); display: grid; grid-template-rows: auto 1fr auto; max-height: min(560px, 70vh); overflow: hidden; }
+.chat header { padding: 12px 14px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.chat .msgs { padding: 12px; display: grid; gap: 8px; align-content: start; overflow-y: auto; background: var(--bg); }
+.b { max-width: 85%; padding: 8px 10px; border-radius: 8px; font-size: 13.5px; }
+.b.bot { background: var(--surface); border: 1px solid var(--line); }
+.b.yo { background: var(--block); justify-self: end; }
+.chat footer { padding: 10px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 6px; }
+.chat footer button { border: 1px solid var(--line); background: var(--surface); border-radius: 14px; padding: 4px 10px; cursor: pointer; font-size: 12.5px; }
+
+/* PROYECTO */
+.p-hero { position: relative; }
+.p-hero .img { height: clamp(320px, 62vh, 640px); --a: 58deg; }
+.p-nav { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 37px); z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line); }
+.p-nav .inner { display: flex; gap: 4px 20px; align-items: center; justify-content: space-between; padding-block: 10px; overflow-x: auto; }
+.p-nav .links { display: flex; gap: 16px; font-size: 13.5px; white-space: nowrap; }
+.p-nav .links a { text-decoration: none; color: var(--ink-2); }
+.p-nav .links a:hover { color: var(--ink); }
+.p-nav .nm { font-family: var(--f-display); font-weight: 800; letter-spacing: 0.12em; white-space: nowrap; }
+
+.venta { background: var(--surface); border-bottom: 1px solid var(--line); }
+.venta .inner { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; padding-block: 32px; }
+@media (max-width: 860px) { .venta .inner { grid-template-columns: 1fr; } }
+.venta ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.acciones { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* Avance de obra */
+.avance ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); position: relative; }
+.avance ol::before { content: ""; position: absolute; left: 6px; right: 6px; top: 6px; height: 2px; background: var(--line); }
+.avance li { position: relative; display: grid; gap: 6px; font-size: 11.5px; color: var(--ink-2); padding-right: 6px; }
+.avance li i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--block-2); background: var(--surface); }
+.avance li.hecho i { background: var(--ink); border-color: var(--ink); }
+.avance li.actual i { border-color: var(--ink); box-shadow: 0 0 0 4px var(--block); }
+.avance li.actual { color: var(--ink); font-weight: 600; }
+
+/* Galería */
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--line); }
+.tabs button { background: none; border: 0; border-bottom: 2px solid transparent; padding: 8px 12px; cursor: pointer; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-2); }
+.tabs button[aria-selected="true"] { border-bottom-color: var(--ink); color: var(--ink); font-weight: 600; }
+.carrusel { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(240px, 32%); gap: 8px; overflow-x: auto; padding-bottom: 6px; scroll-snap-type: x mandatory; }
+.carrusel .img { height: 220px; scroll-snap-align: start; --a: 34deg; }
+
+/* Edificio */
+.datos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.datos div { background: var(--surface); padding: 16px; display: grid; gap: 4px; }
+.datos b { font-family: var(--f-display); font-size: 24px; }
+@media (max-width: 560px) { .datos { grid-template-columns: 1fr; } }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 14px; padding: 4px 10px; font-size: 13px; }
+
+/* Tipologías */
+.tipos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.tipo { background: var(--surface); border: 1px solid var(--line); display: grid; }
+.tipo .img { height: 150px; --a: 40deg; }
+.tipo .t { padding: 12px; display: grid; gap: 2px; }
+@media (max-width: 900px) { .tipos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Elegí tu piso */
+.pisos { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 20px; background: var(--surface); border: 1px solid var(--line); padding: 20px; }
+@media (max-width: 860px) { .pisos { grid-template-columns: 1fr; } }
+.edif { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; }
+.edif svg { width: 100%; max-width: 360px; height: auto; justify-self: center; display: block; }
+.edif .piso-rect { fill: var(--block); stroke: var(--surface); stroke-width: 2; cursor: pointer; }
+.edif .piso-rect:hover { fill: var(--block-2); }
+.edif .piso-rect.sel { fill: var(--ink); }
+.edif .piso-txt { fill: var(--ink-2); font-family: var(--f-mono); font-size: 11px; pointer-events: none; }
+.edif .piso-txt.sel { fill: var(--bg); }
+.edif .pb { fill: var(--block-2); }
+.flechas { display: grid; gap: 6px; justify-items: center; }
+.flechas button { width: 40px; height: 40px; border: 1px solid var(--line); background: var(--surface); border-radius: 4px; cursor: pointer; }
+.flechas .n { font-family: var(--f-display); font-size: 26px; font-weight: 800; }
+.planta { display: grid; gap: 12px; align-content: start; }
+.planta .img { height: 190px; --a: 24deg; }
+.ufs { display: grid; gap: 8px; }
+.uf { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; border: 1px solid var(--line); padding: 10px 12px; border-radius: 4px; }
+.uf .id { font-family: var(--f-display); font-weight: 800; font-size: 20px; min-width: 40px; }
+.disp { font-family: var(--f-mono); font-size: 11px; border-radius: 10px; padding: 1px 8px; border: 1px solid currentColor; }
+.disp.Disponible { color: var(--ok); } .disp.Reservado { color: var(--warn); } .disp.Vendido { color: var(--bad); }
+
+/* Unidades */
+.unidades { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.unidad { background: var(--surface); border: 1px solid var(--line); padding: 14px; display: grid; gap: 10px; align-content: start; }
+.unidad .m2 { font-family: var(--f-display); font-size: 30px; font-weight: 800; line-height: 1; }
+.unidad .acc { display: grid; gap: 6px; }
+.unidad .acc button { border: 1px solid var(--line); background: var(--bg); padding: 7px 10px; cursor: pointer; text-align: left; font-size: 13px; border-radius: 3px; }
+@media (max-width: 960px) { .unidades { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .unidades { grid-template-columns: 1fr; } }
+
+/* Ubicación */
+.mapa { height: 320px; --a: 18deg; }
+.poi { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.poi div { background: var(--surface); border: 1px solid var(--line); padding: 12px; display: grid; gap: 4px; font-size: 13.5px; }
+@media (max-width: 760px) { .poi { grid-template-columns: 1fr; } }
+
+.contacto { background: var(--ink); color: var(--bg); }
+.contacto .wa { background: var(--bg); color: var(--ink); }
+.contacto .muted { color: inherit; opacity: 0.7; }
+.contacto .nota { color: var(--bg); border-color: var(--bg); background: transparent; }
+
+footer.pie { padding-block: 28px; font-size: 13px; color: var(--ink-2); border-top: 1px solid var(--line); }
+footer.pie .inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(90px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--bg); padding: 8px 14px; border-radius: 6px; font-size: 13px; z-index: 60; max-width: calc(100vw - 32px); }
+</style>
+
+</head>
+<body>
+<div class="boceto-bar gut">
+  <div class="inner">
+    <strong>Boceto de estructura · sin estética</strong>
+    <nav aria-label="Páginas del boceto">
+      <a href="#inicio" data-r="inicio">Inicio</a>
+      <a href="#lq" data-r="lq">Proyecto LQ</a>
+      <a href="#em" data-r="em">EM</a>
+      <a href="#ca" data-r="ca">CA</a>
+      <a href="#gu" data-r="gu">GU</a>
+    </nav>
+    <button type="button" id="toggle-notas" aria-pressed="true">Ocultar notas</button>
+  </div>
+</div>
+
+<!-- ============ INICIO ============ -->
+<main id="v-inicio">
+  <header class="site-head gut" style="top:37px">
+    <div class="inner">
+      <a class="logo" href="#inicio" aria-label="Veta, inicio">VETA</a>
+      <div class="iconos">
+        <span class="ico" title="Instagram">IG</span>
+        <button class="ico abrir-chat" type="button" title="WhatsApp">WA</button>
+        <button class="ico abrir-menu" type="button" title="Menú" aria-label="Abrir menú">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="intro" aria-label="Presentación">
+    <div class="img"><span>Foto o render 1 · [a definir]</span></div>
+    <div class="img"><span>Foto o render 2 · [a definir]</span></div>
+    <div class="marca">
+      <div class="l" aria-label="Veta"><span>V</span><span style="animation-delay:.1s">E</span><span style="animation-delay:.2s">T</span><span style="animation-delay:.3s">A</span></div>
+      <div class="eyebrow">Desarrolladora · <span class="tbd">bajada a definir</span></div>
+    </div>
+  </section>
+  <div class="gut" style="padding-block:10px"><div class="inner"><p class="nota"><b>Intro · referencia Supercielo.</b> Al entrar, dos fotos a pantalla partida se abren desde el centro y aparece el logo letra por letra. Arriba, solo tres íconos: Instagram, WhatsApp (abre el bot) y menú. Respeta "movimiento reducido": sin animación, se ve el estado final.</p></div></div>
+
+  <section class="sec gut" id="proyectos" aria-labelledby="h-proy">
+    <div class="inner">
+      <div class="sec-head">
+        <div><div class="eyebrow">Proyectos</div><h2 id="h-proy">Nuestros desarrollos</h2></div>
+        <p class="muted">Tocá un proyecto para ver el edificio, las unidades y consultar.</p>
+      </div>
+      <div class="mosaico" id="mosaico"></div>
+      <p class="nota"><b>Mosaico · referencia Supercielo (obras).</b> Fotos en grilla, una grande. Al pasar el mouse sube una franja con el nombre y el estado (en el celular, la franja está siempre visible). Estados reales hoy: LQ, EM y CA lanzan en enero 2027; GU está en obra. Qué proyectos se muestran a la venta queda pendiente (DE-07).</p>
+    </div>
+  </section>
+
+  <section class="sec gut" style="background:var(--surface)" aria-labelledby="h-veta">
+    <div class="inner dos">
+      <div style="display:grid;gap:14px">
+        <div class="eyebrow">Veta</div>
+        <h2 id="h-veta">Quiénes somos</h2>
+        <p class="muted"><span class="tbd">Texto institucional a definir</span>: trayectoria, forma de trabajo, obras terminadas.</p>
+        <div class="datos" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+          <div><b>4</b><span class="muted">proyectos activos</span></div>
+          <div><b><span class="tbd">[n]</span></b><span class="muted">m² construidos</span></div>
+          <div><b><span class="tbd">[n]</span></b><span class="muted">años</span></div>
+        </div>
+      </div>
+      <div class="img" style="height:320px"><span>Foto del equipo u obra · [a definir]</span></div>
+    </div>
+  </section>
+
+  <section class="sec gut contacto" aria-labelledby="h-cont">
+    <div class="inner dos">
+      <div style="display:grid;gap:12px">
+        <div class="eyebrow" style="color:inherit;opacity:.7">Contacto</div>
+        <h2 id="h-cont">¿Te interesa alguno de nuestros proyectos?</h2>
+        <p class="muted">Escribinos por WhatsApp. Te hacemos unas preguntas y una persona del equipo te contacta dentro de las 4 horas hábiles.</p>
+      </div>
+      <div style="display:grid;gap:12px;justify-items:start">
+        <button class="wa abrir-chat" type="button"><span class="w">WA</span><span>Escribinos por WhatsApp<small>Número del bot: [a definir]</small></span></button>
+        <p class="nota">Este botón abre la charla con el mismo número del bot (orquestador). El texto del aviso ("te contacta…", horario) queda pendiente: DE-10.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ PROYECTO ============ -->
+<main id="v-proyecto" hidden>
+  <section class="p-hero">
+    <div class="img"><span id="p-hero-txt">Render principal del proyecto · [a definir]</span></div>
+  </section>
+  <nav class="p-nav gut" aria-label="Secciones del proyecto">
+    <div class="inner">
+      <a class="nm" href="#inicio" id="p-nm">VETA · LQ</a>
+      <div class="links"><a href="#" data-s="s-galeria">Galería</a><a href="#" data-s="s-edificio">Edificio</a><a href="#" data-s="s-pisos">Elegí tu piso</a><a href="#" data-s="s-unidades">Unidades</a><a href="#" data-s="s-ubicacion">Ubicación</a><a href="#" data-s="s-contacto">Contacto</a></div>
+    </div>
+  </nav>
+
+  <section class="venta gut" aria-label="Condiciones y avance">
+    <div class="inner">
+      <div style="display:grid;gap:14px">
+        <div><div class="eyebrow" id="p-estado-eb">Preventa</div><h2 id="p-titulo">La Quinta</h2></div>
+        <ul>
+          <li>Unidades desde <span class="tbd">precio · pendiente DE-08</span></li>
+          <li>Financiación <span class="tbd">a definir</span></li>
+          <li>Planes de pago <span class="tbd">a definir</span></li>
+        </ul>
+        <div class="acciones">
+          <button class="wa abrir-chat" type="button"><span class="w">WA</span><span>Consultar<small>Escribinos por WhatsApp</small></span></button>
+          <button class="btn2" type="button" data-s="s-pisos">Ver disponibilidad</button>
+        </div>
+      </div>
+      <div class="avance" style="display:grid;gap:14px;align-content:start">
+        <div class="eyebrow">Avance de obra</div>
+        <p id="p-etapa">Etapa actual: <b>a definir</b></p>
+        <ol id="avance"></ol>
+        <p class="nota"><b>Barra de venta y avance · referencia Aragón 4141.</b> Precio "desde", financiación y dos botones: consultar por WhatsApp y ver disponibilidad. A la derecha, la etapa de obra en seis pasos. La etapa real de cada proyecto la carga el equipo.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec gut" id="s-galeria" aria-labelledby="h-gal">
+    <div class="inner">
+      <div><div class="eyebrow">Galería</div><h2 id="h-gal">Explorá el proyecto</h2></div>
+      <div class="tabs" role="tablist" aria-label="Galería">
+        <button role="tab" aria-selected="true" data-g="Interiores">Interiores</button>
+        <button role="tab" aria-selected="false" data-g="Exteriores">Exteriores</button>
+        <button role="tab" aria-selected="false" data-g="Espacios comunes">Espacios comunes</button>
+      </div>
+      <div class="carrusel" id="carrusel"></div>
+      <p class="muted" style="font-size:12.5px">Las imágenes son ilustrativas y no contractuales.</p>
+    </div>
+  </section>
+
+  <section class="sec gut" id="s-edificio" style="background:var(--surface)" aria-labelledby="h-edif">
+    <div class="inner">
+      <div><div class="eyebrow">El edificio</div><h2 id="h-edif">Datos del proyecto</h2></div>
+      <div class="datos">
+        <div><b><span class="tbd">[n]</span></b><span class="muted">unidades</span></div>
+        <div><b><span class="tbd">[n]</span></b><span class="muted">pisos</span></div>
+        <div><b><span class="tbd">[n]</span></b><span class="muted">tipos de unidad</span></div>
+      </div>
+      <div class="chips" aria-label="Terminaciones y amenities">
+        <span class="chip">Terminación 1 · [a definir]</span><span class="chip">Terminación 2 · [a definir]</span><span class="chip">Amenity · [a definir]</span><span class="chip">Cocheras · [a definir]</span>
+      </div>
+      <h3>Tipologías</h3>
+      <div class="tipos" id="tipos"></div>
+      <p class="nota"><b>Tipologías · referencia Aragón 4141.</b> Una tarjeta por tipo de unidad, con vista 360° o render interior. Los tipos y metros salen de "Unidades y precios" de cada proyecto.</p>
+    </div>
+  </section>
+
+  <section class="sec gut" id="s-pisos" aria-labelledby="h-pisos">
+    <div class="inner">
+      <div class="sec-head"><div><div class="eyebrow">Disponibilidad</div><h2 id="h-pisos">Elegí tu piso</h2></div><span class="ej">Datos de ejemplo</span></div>
+      <div class="pisos">
+        <div class="edif">
+          <svg id="edif-svg" viewBox="0 0 220 340" role="img" aria-label="Fachada del edificio: tocá un piso"></svg>
+          <div class="flechas">
+            <button type="button" id="piso-up" aria-label="Piso de arriba">▲</button>
+            <span class="n" id="piso-n">5</span>
+            <button type="button" id="piso-down" aria-label="Piso de abajo">▼</button>
+          </div>
+        </div>
+        <div class="planta">
+          <div><h3 id="piso-titulo">Piso 5</h3><p class="muted" id="piso-resumen"></p></div>
+          <div class="img"><span>Planta del piso · [a definir]</span></div>
+          <div class="ufs" id="ufs"></div>
+        </div>
+      </div>
+      <p class="nota"><b>Selector de pisos · referencia Aragón 4141.</b> La fachada se pinta por piso: tocás un piso (o usás las flechas) y a la derecha aparece su planta y cada unidad con su estado (disponible, reservada, vendida). "Consultar" abre el WhatsApp con la unidad ya escrita, así el bot sabe qué preguntan. Los pisos y unidades de este boceto son de ejemplo.</p>
+    </div>
+  </section>
+
+  <section class="sec gut" id="s-unidades" style="background:var(--surface)" aria-labelledby="h-unid">
+    <div class="inner">
+      <div class="sec-head"><div><div class="eyebrow">Unidades</div><h2 id="h-unid">Explorá por unidad</h2></div><span class="ej">Datos de ejemplo</span></div>
+      <div class="unidades" id="unidades"></div>
+    </div>
+  </section>
+
+  <section class="sec gut" id="s-ubicacion" aria-labelledby="h-ubic">
+    <div class="inner">
+      <div><div class="eyebrow">Ubicación</div><h2 id="h-ubic">El barrio</h2><p class="muted" id="p-dir">Dirección · [a definir]</p></div>
+      <div class="img mapa"><span>Mapa del barrio con puntos de interés · [a definir]</span></div>
+      <div class="poi">
+        <div><b>Transporte</b><span class="muted">[a definir]</span></div>
+        <div><b>Comercios y gastronomía</b><span class="muted">[a definir]</span></div>
+        <div><b>Espacios verdes, salud y educación</b><span class="muted">[a definir]</span></div>
+      </div>
+      <p class="nota"><b>Ubicación · referencia Aragón 4141.</b> Mapa propio (dibujo o imagen, no Google embebido) y cercanías agrupadas por tipo, con distancias.</p>
+    </div>
+  </section>
+
+  <section class="sec gut contacto" id="s-contacto" aria-labelledby="h-pcont">
+    <div class="inner dos">
+      <div style="display:grid;gap:12px">
+        <div class="eyebrow" style="color:inherit;opacity:.7">Contacto</div>
+        <h2 id="h-pcont">¿Te interesa conocer más?</h2>
+        <p class="muted">Escribinos por WhatsApp. Te contacta una persona del equipo dentro de las 4 horas hábiles.</p>
+      </div>
+      <div style="display:grid;gap:12px;justify-items:start">
+        <button class="wa abrir-chat" type="button"><span class="w">WA</span><span>Contactar por WhatsApp<small>Número del bot: [a definir]</small></span></button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="pie gut"><div class="inner"><span>Veta · <span class="tbd">datos legales a definir</span></span><span><a href="privacidad.html">Política de privacidad</a> · Boceto · 8 de noviembre de 2026</span></div></footer>
+
+<button class="flotante abrir-chat" type="button" aria-label="Abrir WhatsApp">WA</button>
+
+<aside class="chat" id="chat" hidden aria-label="Simulación del bot de WhatsApp">
+  <header><div><b>Veta</b> <span class="muted" style="font-size:12px">· simulación del bot</span></div><button type="button" id="chat-cerrar" class="ico" aria-label="Cerrar">✕</button></header>
+  <div class="msgs" id="msgs"></div>
+  <footer id="opciones"></footer>
+</aside>
+
+<nav class="menu" id="menu" hidden aria-label="Menú del sitio">
+  <button class="close" type="button" id="menu-cerrar">Cerrar</button>
+  <ul>
+    <li><a href="#inicio" data-close>Inicio</a></li>
+    <li><a href="#lq" data-close>La Quinta</a></li>
+    <li><a href="#em" data-close>Emilio La Marca</a></li>
+    <li><a href="#ca" data-close>Cabrera</a></li>
+    <li><a href="#gu" data-close>Guatemala</a></li>
+    <li><a href="#inicio" data-close>Quiénes somos</a></li>
+    <li><a href="privacidad.html">Privacidad</a></li>
+  </ul>
+  <p class="nota">Menú a pantalla completa, como en Supercielo. Las secciones definitivas se ajustan con el contenido.</p>
+</nav>
+
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+(function () {
+  var PROY = {
+    lq: { cod: 'LQ', nombre: 'La Quinta', estado: 'Preventa', clase: 'preventa', etapa: 0, dir: 'Dirección · [a definir]' },
+    em: { cod: 'EM', nombre: 'Emilio La Marca', estado: 'Preventa', clase: 'preventa', etapa: 0, dir: 'Emilio Lamarca 1702 / San Blas 3615' },
+    ca: { cod: 'CA', nombre: 'Cabrera', estado: 'Preventa', clase: 'preventa', etapa: 0, dir: 'Dirección · [a definir]' },
+    gu: { cod: 'GU', nombre: 'Guatemala', estado: 'En obra', clase: 'obra', etapa: null, dir: 'Dirección · [a definir]' }
+  };
+  var ETAPAS = ['Tareas preliminares', 'Fundaciones', 'Estructura', 'Mampostería y terminaciones', 'Instalaciones', 'Entrega'];
+  // Pisos y unidades de EJEMPLO (no son datos reales)
+  var PISOS = 8;
+  var UFS_EJ = [ { u: 'A', amb: '3 amb.', m2: '[m²]', e: 'Reservado' }, { u: 'B', amb: '2 amb.', m2: '[m²]', e: 'Disponible' }, { u: 'C', amb: '2 amb.', m2: '[m²]', e: 'Vendido' } ];
+  var $ = function (s) { return document.querySelector(s); };
+  var actual = 'lq', piso = 5;
+
+  function toast(t) { var el = $('#toast'); el.textContent = t; el.hidden = false; clearTimeout(toast._t); toast._t = setTimeout(function () { el.hidden = true; }, 3200); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  // Mosaico de inicio
+  var orden = ['lq', 'em', 'ca', 'gu'];
+  $('#mosaico').innerHTML = orden.map(function (k, i) {
+    var p = PROY[k];
+    return '<a class="p' + (i === 0 ? ' grande' : '') + '" href="#' + k + '"><div class="img"><span>Foto ' + p.cod + ' · [a definir]</span></div>' +
+      '<div class="cap"><b>' + esc(p.nombre) + '</b><span class="estado ' + p.clase + '">' + p.estado + '</span></div></a>';
+  }).join('') + '<div class="img" style="grid-column:span 2"><span>Foto obra terminada · [a definir]</span></div><div class="img"><span>Detalle · [a definir]</span></div><div class="img"><span>Detalle · [a definir]</span></div>';
+
+  // Galería
+  function galeria(cat) { var h = ''; for (var i = 1; i <= 5; i++) h += '<div class="img"><span>' + cat + ' ' + i + ' · [render]</span></div>'; $('#carrusel').innerHTML = h; }
+  document.querySelectorAll('.tabs [role=tab]').forEach(function (b) {
+    b.addEventListener('click', function () { document.querySelectorAll('.tabs [role=tab]').forEach(function (x) { x.setAttribute('aria-selected', x === b); }); galeria(b.dataset.g); });
+  });
+
+  // Tipologías y unidades
+  function tipos() {
+    var t = ['Tipo 1', 'Tipo 2', 'Tipo 3', 'Tipo 4'];
+    $('#tipos').innerHTML = t.map(function (x) { return '<div class="tipo"><div class="img"><span>360° · [a definir]</span></div><div class="t"><b>' + x + '</b><span class="muted" style="font-size:13px">[ambientes] · [m² cubiertos + semicubiertos]</span></div></div>'; }).join('');
+    $('#unidades').innerHTML = t.map(function (x, i) {
+      return '<div class="unidad"><span class="eyebrow">' + x + '</span><div class="m2">[m²]</div><span class="muted" style="font-size:13px">[ambientes] · [orientación]</span>' +
+        '<span class="muted" style="font-size:13px">[n] de [n] disponibles</span><div class="acc">' +
+        '<button type="button" data-t="plano">Ver plano</button><button type="button" data-consulta="' + x + '">Consultar por WhatsApp</button><button type="button" data-t="ficha">Descargar ficha (PDF)</button></div></div>';
+    }).join('');
+  }
+
+  // Avance de obra
+  function avance(p) {
+    var idx = p.etapa;
+    $('#avance').innerHTML = ETAPAS.map(function (e, i) {
+      var c = idx === null ? '' : (i < idx ? 'hecho' : (i === idx ? 'actual' : ''));
+      return '<li class="' + c + '"><i></i>' + e + '</li>';
+    }).join('');
+    $('#p-etapa').innerHTML = idx === null ? 'Etapa actual: <span class="tbd">a cargar por el equipo</span>' : 'Etapa actual: <b>' + ETAPAS[idx] + '</b> <span class="ej">ejemplo</span>';
+  }
+
+  // Edificio y pisos (ejemplo)
+  function dibujarEdificio() {
+    var s = '', h = 32, x = 30, w = 160, y0 = 20;
+    for (var n = PISOS; n >= 1; n--) {
+      var y = y0 + (PISOS - n) * h;
+      s += '<rect class="piso-rect' + (n === piso ? ' sel' : '') + '" data-p="' + n + '" x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" tabindex="0" role="button" aria-label="Piso ' + n + '"></rect>';
+      s += '<text class="piso-txt' + (n === piso ? ' sel' : '') + '" x="' + (x + w / 2) + '" y="' + (y + h / 2 + 4) + '" text-anchor="middle">Piso ' + n + '</text>';
+    }
+    var yb = y0 + PISOS * h;
+    s += '<rect class="pb" x="' + x + '" y="' + yb + '" width="' + w + '" height="36"></rect><text class="piso-txt" x="' + (x + w / 2) + '" y="' + (yb + 22) + '" text-anchor="middle">PB · cocheras</text>';
+    $('#edif-svg').innerHTML = s;
+  }
+  function mostrarPiso() {
+    $('#piso-n').textContent = piso; $('#piso-titulo').textContent = 'Piso ' + piso;
+    var libres = UFS_EJ.filter(function (u) { return u.e === 'Disponible'; }).length;
+    $('#piso-resumen').textContent = UFS_EJ.length + ' unidades · ' + libres + ' disponible' + (libres === 1 ? '' : 's');
+    $('#ufs').innerHTML = UFS_EJ.map(function (u) {
+      var id = piso + u.u;
+      return '<div class="uf"><span class="id">' + id + '</span><span><span style="display:block">' + u.amb + ' · ' + u.m2 + '</span><span class="disp ' + u.e + '">' + u.e + '</span></span>' +
+        (u.e === 'Vendido' ? '<span class="muted" style="font-size:12px">—</span>' : '<button type="button" class="btn2" style="padding:6px 10px;font-size:13px" data-consulta="unidad ' + id + '">Consultar</button>') + '</div>';
+    }).join('');
+    dibujarEdificio();
+  }
+  $('#edif-svg').addEventListener('click', function (e) { var r = e.target.closest('[data-p]'); if (r) { piso = +r.dataset.p; mostrarPiso(); } });
+  $('#edif-svg').addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { var r = e.target.closest('[data-p]'); if (r) { e.preventDefault(); piso = +r.dataset.p; mostrarPiso(); } } });
+  $('#piso-up').onclick = function () { if (piso < PISOS) { piso++; mostrarPiso(); } };
+  $('#piso-down').onclick = function () { if (piso > 1) { piso--; mostrarPiso(); } };
+
+  // Simulación del bot (solo para mostrar el circuito; no envía nada)
+  var paso = 0;
+  var GUION = [
+    { bot: 'Hola, soy el asistente de Veta. ¿Sobre qué proyecto querés consultar?', op: ['La Quinta', 'Emilio La Marca', 'Cabrera', 'Otro'] },
+    { bot: '[Pregunta 2 · lista pendiente DE-09]', op: ['Respuesta de ejemplo'] },
+    { bot: '[Pregunta 3 · lista pendiente DE-09]', op: ['Respuesta de ejemplo'] },
+    { bot: '¿Te parece bien que una persona del equipo te contacte por WhatsApp?', op: ['Sí', 'No por ahora'] },
+    { bot: 'Gracias. Te va a contactar [nombre · DE-10] dentro de las 4 horas hábiles, desde su WhatsApp [número · DE-10].', op: ['Reiniciar'] }
+  ];
+  function chatRender(contexto) {
+    var m = $('#msgs');
+    if (paso === 0) { m.innerHTML = contexto ? '<div class="b yo">Hola, quiero consultar por ' + esc(contexto) + ' de ' + esc(PROY[actual].nombre) + '</div>' : ''; }
+    m.innerHTML += '<div class="b bot">' + esc(GUION[paso].bot) + '</div>';
+    $('#opciones').innerHTML = GUION[paso].op.map(function (o) { return '<button type="button" data-op="' + esc(o) + '">' + esc(o) + '</button>'; }).join('');
+    m.scrollTop = m.scrollHeight;
+  }
+  function abrirChat(contexto) { paso = 0; $('#chat').hidden = false; chatRender(contexto); }
+  $('#opciones').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-op]'); if (!b) return;
+    if (b.dataset.op === 'Reiniciar') { paso = 0; $('#msgs').innerHTML = ''; chatRender(); return; }
+    $('#msgs').innerHTML += '<div class="b yo">' + esc(b.dataset.op) + '</div>';
+    if (paso === 3 && b.dataset.op === 'No por ahora') { $('#msgs').innerHTML += '<div class="b bot">Perfecto. Cuando quieras, escribinos por acá.</div>'; $('#opciones').innerHTML = '<button type="button" data-op="Reiniciar">Reiniciar</button>'; return; }
+    paso = Math.min(paso + 1, GUION.length - 1); chatRender();
+  });
+  $('#chat-cerrar').onclick = function () { $('#chat').hidden = true; };
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.abrir-chat')) { abrirChat(); return; }
+    var c = e.target.closest('[data-consulta]'); if (c) { abrirChat(c.dataset.consulta); return; }
+    var t = e.target.closest('[data-t]'); if (t) { toast(t.dataset.t === 'plano' ? 'Acá se abre el plano de la unidad (a definir).' : 'Acá se descarga la ficha en PDF (a definir).'); return; }
+    var s = e.target.closest('[data-s]'); if (s) { e.preventDefault(); var el = document.getElementById(s.dataset.s); if (el) el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); return; }
+    if (e.target.closest('.abrir-menu')) { $('#menu').hidden = false; $('#menu-cerrar').focus(); return; }
+    if (e.target.id === 'menu-cerrar' || e.target.closest('[data-close]')) { $('#menu').hidden = true; }
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { $('#menu').hidden = true; $('#chat').hidden = true; } });
+
+  // Notas
+  $('#toggle-notas').onclick = function () { var off = document.body.classList.toggle('sin-notas'); this.textContent = off ? 'Mostrar notas' : 'Ocultar notas'; this.setAttribute('aria-pressed', !off); };
+
+  // Rutas
+  function ruta() {
+    var h = (location.hash || '#inicio').slice(1);
+    var esProy = Object.prototype.hasOwnProperty.call(PROY, h);
+    $('#v-inicio').hidden = esProy; $('#v-proyecto').hidden = !esProy;
+    document.querySelectorAll('.boceto-bar a').forEach(function (a) { if (a.dataset.r === (esProy ? h : 'inicio')) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+    if (esProy) {
+      actual = h; var p = PROY[h];
+      $('#p-titulo').textContent = p.nombre; $('#p-nm').textContent = 'VETA · ' + p.cod; $('#p-estado-eb').textContent = p.estado;
+      $('#p-hero-txt').textContent = 'Render principal de ' + p.nombre + ' · [a definir]'; $('#p-dir').textContent = p.dir;
+      avance(p); galeria('Interiores'); tipos(); piso = 5; mostrarPiso();
+      document.querySelectorAll('.tabs [role=tab]').forEach(function (x, i) { x.setAttribute('aria-selected', i === 0); });
+    }
+    $('#chat').hidden = true; window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', ruta);
+  ruta();
+})();
+</script>
+</body>
+</html>
